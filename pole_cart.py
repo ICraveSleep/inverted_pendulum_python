@@ -12,7 +12,7 @@ class PoleCart():
         self.inertia_pole = 0.05  # m^2
         self.dt = 0.00001
         self.fps = 30
-        self.timespan = self.create_time_span(0, 30, self.dt)
+        self.timespan = self.create_time_span(0, 10, self.dt)
         self.ic = [0, 0, 0, 0.15, 0, 0]
 
     def odes(self, p, dp, ddp, a, da, dda):

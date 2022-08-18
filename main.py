@@ -25,57 +25,58 @@ fig.tight_layout()
 
 plt.show()
 
-force = np.array(x)
 velocity = np.array(dx)
 position = np.array(x)
 angle = np.array(t)
 
+
 plt.rcParams['animation.html'] = 'html5'
-x1 = angle
+x1 = position
 y1 = np.zeros(len(time))
 
 # suppose that l = 1
+l = 0.6
 x2 = 1 * np.sin(angle) + x1
 x2b = 1.05 * np.sin(angle) + x1
 y2 = 1 * np.cos(angle) - y1
 y2b = 1.05 * np.cos(angle) - y1
 
-fig = plt.figure(figsize=(8, 6.4))
-ax = fig.add_subplot(111, autoscale_on=False, xlim=(-5, 5), ylim=(-0.4, 1.2))
+fig = plt.figure(figsize=(12.8, 6.4))
+ax = fig.add_subplot(111, autoscale_on=False, xlim=(-2.4, 2.4), ylim=(-1.2, 1.2))
 ax.set_xlabel('position')
 ax.get_yaxis().set_visible(False)
 
-crane_rail, = ax.plot([-1.5, 0.5], [-0.2, -0.2], 'k-', lw=4)
-start, = ax.plot([-1, -1], [-1.5, 1.5], 'k:', lw=2)
-objective, = ax.plot([0, 0], [-0.5, 1.5], 'k:', lw=2)
-mass1, = ax.plot([], [], linestyle='None', marker='s', markersize=10, markeredgecolor='k', color='orange',
-                 markeredgewidth=2)
-mass2, = ax.plot([], [], linestyle='None', marker='o',
+floor, = ax.plot([-5, 5], [-0.2, -0.2], 'k-', lw=4)
+cart, = ax.plot([], [], linestyle='None', marker='s', markersize=40, markeredgecolor='k', color='orange',
+                markeredgewidth=2)
+pendulum, = ax.plot([], [], linestyle='None', marker='o',
                  markersize=20, markeredgecolor='k',
                  color='orange', markeredgewidth=2)
-line, = ax.plot([], [], 'o-', color='orange', lw=4,
-                markersize=6, markeredgecolor='k',
-                markerfacecolor='k')
+rod, = ax.plot([], [], 'o-', color='k', lw=4,
+               markersize=6, markeredgecolor='k',
+               markerfacecolor='k')
 time_template = 'time = %.1fs'
 time_text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
-start_text = ax.text(-1.06, -0.3, 'start', ha='right')
-end_text = ax.text(0.06, -0.3, 'objective', ha='left')
+
+
+# start_text = ax.text(-1.06, -0.3, 'start', ha='right')
+# end_text = ax.text(0.06, -0.3, 'objective', ha='left')
 
 
 def init():
-    mass1.set_data([], [])
-    mass2.set_data([], [])
-    line.set_data([], [])
+    cart.set_data([], [])
+    pendulum.set_data([], [])
+    rod.set_data([], [])
     time_text.set_text('')
-    return line, mass1, mass2, time_text
+    return rod, cart, pendulum, time_text
 
 
 def animate(i):
-    mass1.set_data([x1[i]], [y1[i] - 0.1])
-    mass2.set_data([x2b[i]], [y2b[i]])
-    line.set_data([x1[i], x2[i]], [y1[i], y2[i]])
+    cart.set_data([x1[i]], [y1[i] - 0.05])
+    pendulum.set_data([x2b[i]], [y2b[i]])
+    rod.set_data([x1[i], x2[i]], [y1[i]+0.01, y2[i]])
     time_text.set_text(time_template % time[i])
-    return line, mass1, mass2, time_text
+    return rod, cart, pendulum, time_text
 
 
 ani_a = animation.FuncAnimation(fig, animate,
