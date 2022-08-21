@@ -7,8 +7,9 @@ class Plotter:
         pass
 
     @staticmethod
-    def plot_states(pos, d_pos, dd_pos, angle, d_angle, dd_angle, time):
+    def plot_states(pos, d_pos, dd_pos, angle, d_angle, dd_angle, time, name="Plot"):
         fig, axs = plt.subplots(3, 2)
+        fig.suptitle(name, fontsize=14)
         axs[0, 0].plot(time, pos)
         axs[0, 0].set_title("x")
         axs[1, 0].plot(time, d_pos)

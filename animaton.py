@@ -49,7 +49,7 @@ def pole_cart_animate(angle, position, time):
         time_text.set_text(time_template % time[i])
         return rod, cart, pendulum, time_text
 
-    ani_a = animation.FuncAnimation(fig, animate,
+    anim = animation.FuncAnimation(fig, animate,
                                     np.arange(1, len(time)),
                                     interval=40, blit=False, init_func=init)
 
@@ -58,6 +58,6 @@ def pole_cart_animate(angle, position, time):
     #  add ffmpeg.exe to path such as C:\ffmpeg\bin\ in
     #  environment variables
 
-    # ani_a.save('Pendulum_Control.mp4',fps=30)
+    anim.save('gifs/animation.gif', writer='imagemagick', fps=30)
 
     plt.show()

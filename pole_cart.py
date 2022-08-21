@@ -104,10 +104,20 @@ class PoleCart():
         dx = prem[0]
         dt = prem[1]
 
-        #dx = dx + self.dt * ddx
-        #dt = dt + self.dt * ddt
         x = x + self.dt * dx
         t = t + self.dt * dt
+
+        #f1 = [dx, dt]
+        #f2 = self.sum_list([[x, t], [(self.dt / 2) * a for a in f1]])
+        #f3 = self.sum_list([[x, t], [(self.dt / 2) * a for a in f2]])
+        #f4 = self.sum_list([[x, t], [self.dt * a for a in f3]])
+        #f1 = [a * self.dt / 6 for a in f1]
+        #f2 = [a * self.dt / 3 for a in f2]
+        #f3 = [a * self.dt / 3 for a in f3]
+        #f4 = [a * self.dt / 6 for a in f4]
+        #prem = self.sum_list([[yk[0], yk[3]], f1, f2, f3, f4])
+        #x = prem[0]
+        #t = prem[1]
         return x, dx, ddx, t, dt, ddt
 
     def RK4_odes(self, p, dp, ddp, a, da, dda):
