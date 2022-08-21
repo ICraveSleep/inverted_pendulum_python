@@ -6,9 +6,9 @@ from animaton import pole_cart_animate
 
 pole_cart = PoleCart()
 plotter = Plotter()
-x, dx, ddx, t, dt, ddt, time = pole_cart.ode_euler_simulation()
-print(len(x), len(t), len(time))
-
+# x, dx, ddx, t, dt, ddt, time = pole_cart.ode_euler_simulation()
+#print(len(x), len(t), len(time))
+x, dx, ddx, t, dt, ddt, time = pole_cart.ode_RK4_simulation()
 velocity = np.array(dx)
 position = np.array(x)
 angle = np.array(t)
