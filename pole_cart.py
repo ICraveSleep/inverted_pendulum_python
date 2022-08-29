@@ -6,14 +6,15 @@ class PoleCart():
         print("Hello World!")
         self.mass_cart = 10  # kg
         self.mass_pole = 10  # kg
-        self.damping_cart = 0  # Ns/m
-        self.damping_pole = 0  # Ns/m
+        self.damping_cart = 0.1  # Ns/m
+        self.damping_pole = 1  # Ns/m
         self.length_pole = 0.6  # m
         self.inertia_pole = 0.05  # m^2
         self.dt = 0.00001  # 0.00001
         self.fps = 30
-        self.timespan = self.create_time_span(0, 10, self.dt)
-        self.ic = [0, 0, 0, 0.15, 0, 0]
+        self.timespan = self.create_time_span(0, 20, self.dt)
+        self.ic = [0, 0, 0, 3.14, 0, 0]
+        self.swing_up = True
 
     def odes(self, p, dp, ddp, a, da, dda):
         m_p = self.mass_pole
@@ -22,10 +23,26 @@ class PoleCart():
         b_p = self.damping_pole
         l_p = self.length_pole
         i_p = self.inertia_pole
-        F_m = 0
         g = 9.81
-        ddp = (F_m - b_c * dp + m_p * l_p * dda * cos(a) - m_p * l_p * da ** 2 * sin(a)) / (m_c + m_p)
-        dda = (m_p * l_p * g * sin(a) + m_p * l_p * ddp * cos(a)) / (i_p + m_p * l_p ** 2)
+
+        E = g*l_p*cos(a)*m_p
+        E_t = g*l_p*m_p
+
+        if a < 0.0 or a > 3.1415*2:
+            self.swing_up = False
+
+        if self.swing_up:
+            if a > 1.571 or a < 4.712:
+                f = (E - E_t)*da*cos(a)*0.2
+            else:
+                f = 0
+        else:
+            f = 0
+
+        F_m = f
+        ddp = (F_m - b_c * dp - m_p * l_p * dda * cos(a) + m_p * l_p * da ** 2 * sin(a)) / (m_c + m_p)
+        #ddp = F_m/(m_p + m_c)
+        dda = (-b_p * da + m_p * l_p * g * sin(a) - m_p * l_p * ddp * cos(a)) / (i_p + m_p * l_p ** 2)
         dp = dp + ddp * self.dt
         da = da + dda * self.dt
         p = p + dp * self.dt

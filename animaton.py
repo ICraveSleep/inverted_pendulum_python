@@ -49,15 +49,13 @@ def pole_cart_animate(angle, position, time):
         time_text.set_text(time_template % time[i])
         return rod, cart, pendulum, time_text
 
-    anim = animation.FuncAnimation(fig, animate,
-                                    np.arange(1, len(time)),
-                                    interval=40, blit=False, init_func=init)
+    anim = animation.FuncAnimation(fig, animate, len(time), interval=40, blit=False, init_func=init)
 
     # requires ffmpeg to save mp4 file
     #  available from https://ffmpeg.zeranoe.com/builds/
     #  add ffmpeg.exe to path such as C:\ffmpeg\bin\ in
     #  environment variables
 
-    anim.save('gifs/animation.gif', writer='imagemagick', fps=30)
+    #anim.save('gifs/animation.gif', writer='imagemagick', fps=30)
 
     plt.show()
