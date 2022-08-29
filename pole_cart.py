@@ -147,7 +147,7 @@ class PoleCart():
         g = 9.81
 
         ddp = (F_m - b_c * dp + m_p * l_p * dda * cos(a) - m_p * l_p * da ** 2 * sin(a)) / (m_c + m_p)
-        dda = (m_p * l_p * g * sin(a) + m_p * l_p * ddp * cos(a)) / (i_p + m_p * l_p ** 2)
+        dda = (-b_p * da + m_p * l_p * g * sin(a) - m_p * l_p * ddp * cos(a)) / (i_p + m_p * l_p ** 2)
         return [ddp, dda]
 
     def compress(self, x, dx, ddx, t, dt, ddt, time):
