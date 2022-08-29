@@ -38,9 +38,8 @@ class PoleCart():
                 f = 0
         else:
             f = 0
-
         F_m = f
-        ddp = (F_m - b_c * dp - m_p * l_p * dda * cos(a) + m_p * l_p * da ** 2 * sin(a)) / (m_c + m_p)
+        ddp = (F_m - b_c * dp + m_p * l_p * dda * cos(a) - m_p * l_p * da ** 2 * sin(a)) / (m_c + m_p)
         #ddp = F_m/(m_p + m_c)
         dda = (-b_p * da + m_p * l_p * g * sin(a) - m_p * l_p * ddp * cos(a)) / (i_p + m_p * l_p ** 2)
         dp = dp + ddp * self.dt
