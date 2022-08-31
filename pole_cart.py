@@ -63,6 +63,8 @@ class PoleCart():
                                                                              theta, theta_dot, theta_ddot, time)
         return x, x_dot, x_ddot, theta, theta_dot, theta_ddot, time
 
+    #def lqr(self, ):
+
     def ode_RK4_simulation(self):
         x = [self.ic[0]]
         x_dot = [self.ic[1]]
