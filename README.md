@@ -7,9 +7,11 @@
 Swing-up using energy pumping method
 
 $$
-    f(t) = (E_p(t) - E_t(t))*\dot\theta\cos(\theta)
+    f(t) = (E_p(t) - E_t(t))\dot\theta\cos(\theta)
 $$
-Where 
+
+Where
+
 $$
     E_p(t) = m_pgl_p\cos(\theta) ~~and~~ E_t(t) = m_pgl_p
 $$
