@@ -12,7 +12,7 @@ class PoleCart():
         self.inertia_pole = 0.05  # m^2
         self.dt = 0.00001  # 0.00001
         self.fps = 30
-        self.timespan = self.create_time_span(0, 20, self.dt)
+        self.timespan = self.create_time_span(0, 7, self.dt)
         self.ic = [0, 0, 0, 3.14, 0, 0]
         self.swing_up_flag = True
 
@@ -151,7 +151,7 @@ class PoleCart():
 
         if self.swing_up_flag:
             if angle > 1.571 or angle < 4.712:
-                f = (E_p - E_t) * angle_dot * cos(angle) * 0.18
+                f = (E_p - E_t) * angle_dot * cos(angle) * 0.45
             else:
                 f = 0
         else:
