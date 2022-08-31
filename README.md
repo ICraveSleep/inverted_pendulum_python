@@ -13,7 +13,7 @@ $$
 Where
 
 $$
-    E_p(t) = m_pgl_p\cos(\theta) ~~and~~ E_t(t) = m_pgl_p
+    E_p(t) = m_pgl_p\cos(\theta) ~~ and ~~ E_t(t) = m_pgl_p
 $$
 
 <p align="center">
