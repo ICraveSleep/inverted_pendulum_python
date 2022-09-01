@@ -1,5 +1,6 @@
 from math import cos, sin
-
+from numpy import matrix, array
+import control
 
 class PoleCart():
     def __init__(self, init_pos=None, init_angle=None):
@@ -7,14 +8,23 @@ class PoleCart():
         self.mass_cart = 10  # kg
         self.mass_pole = 10  # kg
         self.damping_cart = 0.1  # Ns/m
-        self.damping_pole = 1.17  # Ns/m
+        self.damping_pole = 0  # Ns/m  ¤ 1.17
         self.length_pole = 0.6  # m
         self.inertia_pole = 0.05  # m^2
+        self.g = 9.81 # m/s^2
         self.dt = 0.00001  # 0.00001
         self.fps = 30
-        self.timespan = self.create_time_span(0, 7, self.dt)
-        self.ic = [0, 0, 0, 3.14, 0, 0]
+        self.timespan = self.create_time_span(0, 20, self.dt)
+        self.ic = [0, 0, 0, 3.1, 0, 0]
         self.swing_up_flag = True
+        self.use_lqr = False
+        self.A, self.B, self.K = self.generate_state_space()
+        self.ref = matrix([
+            [-1],
+            [0],
+            [0],
+            [0]
+        ])
 
     def odes(self, p, dp, ddp, a, da, dda):
         m_p = self.mass_pole
@@ -23,12 +33,15 @@ class PoleCart():
         b_p = self.damping_pole
         l_p = self.length_pole
         i_p = self.inertia_pole
-        g = 9.81
+        g = self.g
 
         if self.swing_up_flag:
             f = self.swing_up(a, da)
         else:
             f = 0
+
+        if self.use_lqr:
+            f = self.lqr(p, dp, a, da)
         F_m = f
         ddp = (F_m - b_c * dp + m_p * l_p * dda * cos(a) - m_p * l_p * da ** 2 * sin(a)) / (m_c + m_p)
         #ddp = F_m/(m_c+m_p)
@@ -38,6 +51,46 @@ class PoleCart():
         p = p + dp * self.dt
         a = a + da * self.dt
         return [p, dp, ddp, a, da, dda]
+
+    def generate_state_space(self):
+        g = self.g
+        m_p = self.mass_pole
+        m_c = self.mass_cart
+        b_c = self.damping_cart
+        b_p = self.damping_pole
+        l_p = self.length_pole
+        i_p = self.inertia_pole
+        num = (l_p**2*m_c+i_p)*m_p + i_p*m_c
+        a_22 = (-b_c*(m_p*l_p**2 + i_p))/num
+        a_23 = (l_p**2*g*m_p**2)/num
+        a_24 = (-b_p*l_p*m_p)/num
+        a_42 = (-b_c*m_p*l_p)/num
+        a_43 = (m_p*g*l_p*(m_c+m_p))/num
+        a_44 = (-b_p*(m_c+m_p))/num
+        A = matrix([
+            [0,  1,    0,    0  ],
+            [0, a_22, a_23, a_24],
+            [0,  0,    0,    1  ],
+            [0, a_42, a_43, a_44]
+        ])
+        b_2 = (m_p*l_p**2+i_p)/num
+        b_4 = m_p*l_p/num
+        B = matrix([
+            [0],
+            [b_2],
+            [0],
+            [b_4]
+        ])
+        Q = matrix([
+            [1, 0, 0,  0],
+            [0, 1, 0,  0],
+            [0, 0, 11111100, 0],
+            [0, 0,  0, 1]
+        ])
+        R = 0.01
+
+        K, S, E = control.lqr(A, B, Q, R)
+        return A, B, K
 
     def ode_euler_simulation(self):
         x = [self.ic[0]]
@@ -63,7 +116,16 @@ class PoleCart():
                                                                              theta, theta_dot, theta_ddot, time)
         return x, x_dot, x_ddot, theta, theta_dot, theta_ddot, time
 
-    #def lqr(self, ):
+    def lqr(self, x, dx, a, da):
+        X = matrix([
+            [x],
+            [dx],
+            [a],
+            [da]
+        ])
+
+        u_t = -self.K*(self.ref - X)
+        return u_t[0, 0]
 
     def ode_RK4_simulation(self):
         x = [self.ic[0]]
@@ -150,10 +212,11 @@ class PoleCart():
 
         if angle < 0.0 or angle_dot > 3.1415 * 2:
             self.swing_up_flag = False
+            self.use_lqr = True
 
         if self.swing_up_flag:
             if angle > 1.571 or angle < 4.712:
-                f = (E_p - E_t) * angle_dot * cos(angle) * 0.45
+                f = (E_p - E_t) * angle_dot * cos(angle) * 0.35
             else:
                 f = 0
         else:
