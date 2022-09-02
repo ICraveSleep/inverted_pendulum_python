@@ -82,10 +82,10 @@ class PoleCart():
             [b_4]
         ])
         Q = matrix([
-            [1, 0, 0,  0],
-            [0, 1, 0,  0],
-            [0, 0, 11111100, 0],
-            [0, 0,  0, 1]
+            [1000, 0, 0,  0],
+            [0, 10, 0,  0],
+            [0, 0, 11110, 0],
+            [0, 0,  0, 10000]
         ])
         R = 0.01
 
@@ -120,11 +120,11 @@ class PoleCart():
         X = matrix([
             [x],
             [dx],
-            [a],
-            [da]
+            [-a],
+            [-da]
         ])
 
-        u_t = -self.K*(self.ref - X)
+        u_t = -self.K*(X - self.ref)
         return u_t[0, 0]
 
     def ode_RK4_simulation(self):
