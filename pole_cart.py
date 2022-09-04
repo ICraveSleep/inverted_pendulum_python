@@ -17,7 +17,7 @@ class PoleCart():
         self.timespan = self.create_time_span(0, 20, self.dt)
         self.ic = [0, 0, 0, 3.1, 0, 0]
         self.swing_up_flag = True
-        self.use_lqr = False
+        self.use_lqr = False  # Flag to enable lqr after swing up.
         self.A, self.B, self.K = self.generate_state_space()
         self.ref = matrix([
             [-1],
