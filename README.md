@@ -50,3 +50,10 @@ $$
     \end{bmatrix}
     u(t)
 $$
+
+Adding state feedback where the gain matrix is calulated
+using LQR
+
+<p align="center">
+    <img src="gifs/inverted_pendulum.gif"/>
+</p>

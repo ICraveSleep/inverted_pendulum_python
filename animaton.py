@@ -21,6 +21,7 @@ def pole_cart_animate(angle, position, time):
     ax.get_yaxis().set_visible(False)
 
     floor, = ax.plot([-5, 5], [-0.2, -0.2], 'k-', lw=4)
+    goal, = ax.plot([], [], 'b:')
     cart, = ax.plot([], [], linestyle='None', marker='s', markersize=40, markeredgecolor='k', color='orange',
                     markeredgewidth=2)
     pendulum, = ax.plot([], [], linestyle='None', marker='o',
@@ -39,24 +40,27 @@ def pole_cart_animate(angle, position, time):
         cart.set_data([], [])
         pendulum.set_data([], [])
         rod.set_data([], [])
+        goal.set_data([], [])
         time_text.set_text('')
-        return rod, cart, pendulum, time_text
+        return rod, cart, pendulum, goal, time_text
 
     def animate(i):
         cart.set_data([x1[i]], [y1[i] - 0.05])
         pendulum.set_data([x2b[i]], [y2b[i]])
         rod.set_data([x1[i], x2[i]], [y1[i] + 0.01, y2[i]])
         time_text.set_text(time_template % time[i])
-        return rod, cart, pendulum, time_text
+        if time[i] <= 13.5:
+            goal.set_data([-1, -1], [-4, 4])
+
+        else:
+            goal.set_data([0, 0], [-4, 4])
+        return goal, rod, cart, pendulum, time_text
 
     anim = animation.FuncAnimation(fig, animate, len(time), interval=40, blit=False, init_func=init)
 
-    # requires ffmpeg to save mp4 file
-    #  available from https://ffmpeg.zeranoe.com/builds/
-    #  add ffmpeg.exe to path such as C:\ffmpeg\bin\ in
-    #  environment variables
 
     #anim.save('gifs/animation.gif', writer='imagemagick', fps=30)
     #anim.save('gifs/energy_swingup.gif', writer='imagemagick', fps=30)
+    #anim.save('gifs/inverted_pendulum.gif', writer='imagemagick', fps=30)
 
     plt.show()

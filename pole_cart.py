@@ -111,6 +111,13 @@ class PoleCart():
             theta.append(states[3])
             theta_dot.append(states[4])
             theta_ddot.append(states[5])
+            if t >= 13.5:
+                self.ref = matrix([
+                    [0],
+                    [0],
+                    [0],
+                    [0]
+                ])
         time.append(self.dt * len(self.timespan))
         x, x_dot, x_ddot, theta, theta_dot, theta_ddot, time = self.compress(x, x_dot, x_ddot,
                                                                              theta, theta_dot, theta_ddot, time)
