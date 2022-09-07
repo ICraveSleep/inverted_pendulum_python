@@ -15,9 +15,9 @@ class PoleCart():
         self.dt = 0.00001  # 0.00001
         self.fps = 30
         self.timespan = self.create_time_span(0, 20, self.dt)
-        self.ic = [0, 0, 0, 3.1, 0, 0]
-        self.swing_up_flag = True
-        self.use_lqr = False  # Flag to enable lqr after swing up.
+        self.ic = [0, 0, 0, 0.1, 0, 0]
+        self.swing_up_flag = False
+        self.use_lqr = True  # Flag to enable lqr after swing up.
         self.A, self.B, self.K = self.generate_state_space()
         self.ref = matrix([
             [-1],
@@ -45,7 +45,7 @@ class PoleCart():
         F_m = f
         ddp = (F_m - b_c * dp + m_p * l_p * dda * cos(a) - m_p * l_p * da ** 2 * sin(a)) / (m_c + m_p)
         #ddp = F_m/(m_c+m_p)
-        dda = (-b_p * da + m_p * l_p * g * sin(a) - m_p * l_p * ddp * cos(a)) / (i_p + m_p * l_p ** 2)
+        dda = (-b_p * da + m_p * l_p * g * sin(a) + m_p * l_p * ddp * cos(a)) / (i_p + m_p * l_p ** 2)
         dp = dp + ddp * self.dt
         da = da + dda * self.dt
         p = p + dp * self.dt
@@ -127,8 +127,8 @@ class PoleCart():
         X = matrix([
             [x],
             [dx],
-            [-a],
-            [-da]
+            [a],
+            [da]
         ])
 
         u_t = -self.K*(X - self.ref)

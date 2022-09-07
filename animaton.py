@@ -10,8 +10,8 @@ def pole_cart_animate(angle, position, time):
     x1 = position
     y1 = np.zeros(len(time))
 
-    x2 = pendulum_length * np.sin(angle) + x1
-    x2b = pendulum_length * 1.05 * np.sin(angle) + x1
+    x2 = -pendulum_length * np.sin(angle) + x1
+    x2b = -pendulum_length * 1.05 * np.sin(angle) + x1
     y2 = pendulum_length * np.cos(angle) - y1
     y2b = pendulum_length * 1.05 * np.cos(angle) - y1
 
