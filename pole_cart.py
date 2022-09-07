@@ -8,16 +8,16 @@ class PoleCart():
         self.mass_cart = 10  # kg
         self.mass_pole = 10  # kg
         self.damping_cart = 0.1  # Ns/m
-        self.damping_pole = 0  # Ns/m  ¤ 1.17
+        self.damping_pole = 1.17  # Ns/m  ¤ 1.17
         self.length_pole = 0.6  # m
         self.inertia_pole = 0.05  # m^2
         self.g = 9.81 # m/s^2
         self.dt = 0.00001  # 0.00001
         self.fps = 30
         self.timespan = self.create_time_span(0, 20, self.dt)
-        self.ic = [0, 0, 0, 0.1, 0, 0]
-        self.swing_up_flag = False
-        self.use_lqr = True  # Flag to enable lqr after swing up.
+        self.ic = [0, 0, 0, 3.1, 0, 0]
+        self.swing_up_flag = True
+        self.use_lqr = False  # Flag to enable lqr after swing up.
         self.A, self.B, self.K = self.generate_state_space()
         self.ref = matrix([
             [-1],
@@ -34,7 +34,6 @@ class PoleCart():
         l_p = self.length_pole
         i_p = self.inertia_pole
         g = self.g
-
         if self.swing_up_flag:
             f = self.swing_up(a, da)
         else:
@@ -42,6 +41,7 @@ class PoleCart():
 
         if self.use_lqr:
             f = self.lqr(p, dp, a, da)
+           # f = 0
         F_m = f
         ddp = (F_m - b_c * dp + m_p * l_p * dda * cos(a) - m_p * l_p * da ** 2 * sin(a)) / (m_c + m_p)
         #ddp = F_m/(m_c+m_p)
@@ -217,13 +217,14 @@ class PoleCart():
         E_p = g * self.length_pole * cos(angle) * self.mass_pole
         E_t = g * self.length_pole * self.mass_pole
 
-        if angle < 0.0 or angle_dot > 3.1415 * 2:
+        if angle < 0.0 or angle > 3.1415 * 2:
+            print("lqr at", angle)
             self.swing_up_flag = False
             self.use_lqr = True
 
         if self.swing_up_flag:
             if angle > 1.571 or angle < 4.712:
-                f = (E_p - E_t) * angle_dot * cos(angle) * 0.35
+                f = (E_t - E_p) * angle_dot * cos(angle) * 0.45
             else:
                 f = 0
         else:
