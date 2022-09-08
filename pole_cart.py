@@ -82,10 +82,10 @@ class PoleCart():
             [b_4]
         ])
         Q = matrix([
-            [1000, 0, 0,  0],
-            [0, 10, 0,  0],
-            [0, 0, 11110, 0],
-            [0, 0,  0, 10000]
+            [10, 0, 0,  0],
+            [0, 1, 0,  0],
+            [0, 0, 50, 0],
+            [0, 0,  0, 100]
         ])
         R = 0.01
 
@@ -217,7 +217,7 @@ class PoleCart():
         E_p = g * self.length_pole * cos(angle) * self.mass_pole
         E_t = g * self.length_pole * self.mass_pole
 
-        if angle < 0.0 or angle > 3.1415 * 2:
+        if angle < 0.0 + 0.5 or angle > 3.1415 * 2 - 0.5:
             print("lqr at", angle)
             self.swing_up_flag = False
             self.use_lqr = True
