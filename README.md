@@ -57,3 +57,8 @@ using LQR
 <p align="center">
     <img src="gifs/inverted_pendulum.gif"/>
 </p>
+
+With corrected (?) equations and transformations
+<p align="center">
+    <img src="gifs/inverted_pendulum_correct.gif"/>
+</p>

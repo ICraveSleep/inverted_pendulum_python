@@ -62,5 +62,6 @@ def pole_cart_animate(angle, position, time):
     #anim.save('gifs/animation.gif', writer='imagemagick', fps=30)
     #anim.save('gifs/energy_swingup.gif', writer='imagemagick', fps=30)
     #anim.save('gifs/inverted_pendulum.gif', writer='imagemagick', fps=30)
+    #anim.save('gifs/inverted_pendulum_correct.gif', writer='imagemagick', fps=30)
 
     plt.show()
