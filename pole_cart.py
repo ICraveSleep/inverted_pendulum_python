@@ -1,5 +1,5 @@
 from math import cos, sin
-from numpy import matrix, array
+from numpy import matrix, array, sign
 import control
 
 class PoleCart():
@@ -14,7 +14,7 @@ class PoleCart():
         self.g = 9.81 # m/s^2
         self.dt = 0.00001  # 0.00001
         self.fps = 30
-        self.timespan = self.create_time_span(0, 20, self.dt)
+        self.timespan = self.create_time_span(0, 8, self.dt)
         self.ic = [0, 0, 0, 3.1, 0, 0]
         self.swing_up_flag = True
         self.use_lqr = False  # Flag to enable lqr after swing up.
@@ -35,7 +35,7 @@ class PoleCart():
         i_p = self.inertia_pole
         g = self.g
         if self.swing_up_flag:
-            f = self.swing_up(a, da)
+            f = self.swing_up_v2(a, da)
         else:
             f = 0
 
@@ -225,6 +225,30 @@ class PoleCart():
         if self.swing_up_flag:
             if angle > 1.571 or angle < 4.712:
                 f = (E_t - E_p) * angle_dot * cos(angle) * 0.45
+            else:
+                f = 0
+        else:
+            f = 0
+        return f
+
+    def swing_up_v2(self, angle, angle_dot):
+        # https://web.ece.ucsb.edu/~hespanha/ece229/references/AstromFurutaAUTOM00.pdf
+        # https://www.researchgate.net/publication/236619208_Swing-Up_Methods_For_Inverted_Pendulum
+        g = 9.81
+        E_p = 0.5*self.inertia_pole*angle_dot**2 + g * self.length_pole * self.mass_pole * (cos(angle)-1)
+        E_t = 0
+
+        if angle < 0.0 + 0.15 or angle > 3.1415 * 2 - 0.15:
+            print("lqr at", angle)
+            self.swing_up_flag = False
+            self.use_lqr = True
+
+        if self.swing_up_flag:
+            if angle > 1.571 or angle < 4.712:
+                f = (E_t - E_p) * angle_dot * cos(angle) * 0.45
+                #f = (E_t - E_p) * sign(angle_dot) * cos(angle) * 0.45
+            elif E_p == E_t:
+                f = 0
             else:
                 f = 0
         else:
