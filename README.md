@@ -25,7 +25,8 @@ $$
 </p>
 
 ## Swing-up ##
-In order to swing the pendulum up, an energy pumping method is used. It only considers the potential energy of the pendulum. 
+In order to swing the pendulum up, an energy pumping method is used. $E_t$ is the wanted energy, and $E_p$ is
+the current pendulum energy.
 
 $$
     u(t) = (E_p(t) - E_t)\dot\theta\cos(\theta)
@@ -34,7 +35,7 @@ $$
 Where
 
 $$
-    E_p(t) = m_pgl_p\cos(\theta) ~~ and ~~ E_t = m_pgl_p
+    E_p(t) = \frac{1}{2}I_p\dot\theta^2 +  m_pgl_p\cos(\theta) ~~ and ~~ E_t = m_pgl_p
 $$
 
 <p align="center">
