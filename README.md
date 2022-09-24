@@ -7,13 +7,13 @@ In order to save animations ImageMagick is required. It can be installed from he
 The equations of motion that are presented below. Here the pendulum and cart viscous damping is set to zero. I.e. $b_c = b_p = 0$
 
 
-Cart equation
+Cart equation:
 
 $$
-    \ddot{x}_{cx} = \frac{F_m - b_c\Dot{x} + m_pL_p\ddot{\theta} \cos (\theta) - m_pL_p\dot{\theta}^2 \sin (\theta)}{m_c + m_p}
+    \ddot{x}_{cx} = \frac{F_m - b_c\dot{x} + m_pL_p\ddot{\theta} \cos (\theta) - m_pL_p\dot{\theta}^2 \sin (\theta)}{m_c + m_p}
 $$
 
-Pendulum equation
+Pendulum equation:
 
 $$
     \ddot{\theta} = \frac{-b_p\dot\theta + m_pL_pg\sin(\theta) + m_pL_p\ddot{x}_{cx}\cos(\theta)}{ I_p +m_pL_p^2}
