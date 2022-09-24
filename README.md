@@ -28,7 +28,7 @@ $$
 In order to swing the pendulum up, an energy pumping method is used. It only considers the potential energy of the pendulum. 
 
 $$
-    f(t) = (E_p(t) - E_t)\dot\theta\cos(\theta)
+    u(t) = (E_p(t) - E_t)\dot\theta\cos(\theta)
 $$
 
 Where
