@@ -1,11 +1,29 @@
 # Inverted Pendulum
+In order to run the simulation, simply run main.py
+
+In order to save animations ImageMagick is required. It can be installed from here: https://imagemagick.org/script/download.php
+
+## Simulation of the pole cart system ##
+The equations of motion that are presented below. Here the pendulum and cart viscous damping is set to zero. I.e. $b_c = b_p = 0$
+
+
+Cart equation
+$$
+    \ddot{x}_{cx} = &  \frac{F_m - b_c\Dot{x} + m_pL_p\Ddot{\theta} \cos (\theta) - m_pL_p\Dot{\theta}^2 \sin (\theta)}{m_c + m_p} \\
+$$
+
+Pendulum equation
+$$
+    \ddot{\theta} = \frac{-b_p\dot\theta + m_pL_pg\sin(\theta) + m_pL_p\Ddot{x}_{cx}\cos(\theta)}{ I_p +m_pL_p^2}
+$$
+
 
 <p align="center">
     <img src="gifs/animation.gif"/>
 </p>
 
-Swing-up using energy pumping method
-
+## Swing-up ##
+In order to swing the pendulum up, an energy pumping method is used. It only considers the potential energy of the pendulum. 
 $$
     f(t) = (E_p(t) - E_t)\dot\theta\cos(\theta)
 $$
@@ -20,7 +38,10 @@ $$
     <img src="gifs/energy_swingup.gif"/>
 </p>
 
-## State space model
+## State feedback ##
+The linearized equations of motion, in state space representation, is presented below. The model is applied
+when calculating the state feedback gain matrix.
+
 $$
     \begin{bmatrix}
         \dot x_{cx} \\
@@ -51,14 +72,6 @@ $$
     u(t)
 $$
 
-Adding state feedback where the gain matrix is calulated
-using LQR
-
-<p align="center">
-    <img src="gifs/inverted_pendulum.gif"/>
-</p>
-
-With corrected (?) equations and transformations
 <p align="center">
     <img src="gifs/inverted_pendulum_correct.gif"/>
 </p>

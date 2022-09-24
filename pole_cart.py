@@ -11,10 +11,10 @@ class PoleCart():
         self.damping_pole = 1.17  # Ns/m  ¤ 1.17
         self.length_pole = 0.6  # m
         self.inertia_pole = 0.05  # m^2
-        self.g = 9.81 # m/s^2
+        self.g = 9.81  # m/s^2
         self.dt = 0.00001  # 0.00001
         self.fps = 30
-        self.timespan = self.create_time_span(0, 8, self.dt)
+        self.timespan = self.create_time_span(0, 20, self.dt)
         self.ic = [0, 0, 0, 3.1, 0, 0]
         self.swing_up_flag = True
         self.use_lqr = False  # Flag to enable lqr after swing up.
@@ -245,7 +245,7 @@ class PoleCart():
 
         if self.swing_up_flag:
             if angle > 1.571 or angle < 4.712:
-                f = (E_t - E_p) * angle_dot * cos(angle) * 0.45
+                f = (E_t - E_p) * angle_dot * cos(angle) * 0.4525
                 #f = (E_t - E_p) * sign(angle_dot) * cos(angle) * 0.45
             elif E_p == E_t:
                 f = 0

@@ -58,7 +58,7 @@ def pole_cart_animate(angle, position, time):
 
     anim = animation.FuncAnimation(fig, animate, len(time), interval=40, blit=False, init_func=init)
 
-
+    # uncomment here to save to the different gifs
     #anim.save('gifs/animation.gif', writer='imagemagick', fps=30)
     #anim.save('gifs/energy_swingup.gif', writer='imagemagick', fps=30)
     #anim.save('gifs/inverted_pendulum.gif', writer='imagemagick', fps=30)
