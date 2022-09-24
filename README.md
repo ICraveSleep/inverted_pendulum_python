@@ -1,5 +1,5 @@
 # Inverted Pendulum
-In order to run the simulation, simply run main.py
+In order to run the simulation, simply run `main.py`
 
 In order to save animations ImageMagick is required. It can be installed from here: https://imagemagick.org/script/download.php
 
@@ -8,11 +8,13 @@ The equations of motion that are presented below. Here the pendulum and cart vis
 
 
 Cart equation
+
 $$
     \ddot{x}_{cx} = &  \frac{F_m - b_c\Dot{x} + m_pL_p\Ddot{\theta} \cos (\theta) - m_pL_p\Dot{\theta}^2 \sin (\theta)}{m_c + m_p} \\
 $$
 
 Pendulum equation
+
 $$
     \ddot{\theta} = \frac{-b_p\dot\theta + m_pL_pg\sin(\theta) + m_pL_p\Ddot{x}_{cx}\cos(\theta)}{ I_p +m_pL_p^2}
 $$
@@ -24,6 +26,7 @@ $$
 
 ## Swing-up ##
 In order to swing the pendulum up, an energy pumping method is used. It only considers the potential energy of the pendulum. 
+
 $$
     f(t) = (E_p(t) - E_t)\dot\theta\cos(\theta)
 $$
