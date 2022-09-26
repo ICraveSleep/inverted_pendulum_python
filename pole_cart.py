@@ -257,23 +257,20 @@ class PoleCart():
 
     def swing_up_v3(self, angle, angle_dot):
         g = 9.81
-        E_p = 0.5 * (self.inertia_pole) * angle_dot ** 2 + g * self.length_pole * self.mass_pole * cos(angle)
+        E_p = 0.5 * (self.inertia_pole + self.mass_pole*self.length_pole**2) * angle_dot ** 2 + g * self.mass_pole * self.length_pole*(cos(angle) - 1)
         E_t = self.length_pole*self.mass_pole*g
+        E_t = 0
 
         if angle < 0.0 + 0.15 or angle > 3.1415 * 2 - 0.15:
-            print(f" Energy error at top: {E_t - E_p}")
+            print(f"Energy error at top: {E_t - E_p}")
             print("lqr at", angle)
             self.swing_up_flag = False
             self.use_lqr = True
 
         if self.swing_up_flag:
-            if angle > 1.571 or angle < 4.712:
-                f = (E_t - E_p) * angle_dot * cos(angle) * 0.18525
-                # f = (E_t - E_p) * sign(angle_dot) * cos(angle) * 0.45
-            elif E_p == E_t:
-                f = 0
-            else:
-                f = 0
+            #f = (E_t - E_p) * angle_dot * cos(angle) * 1
+            f = 52 * sign(angle_dot) * sign(cos(angle))
+
         else:
             f = 0
         return f
