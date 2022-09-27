@@ -4,6 +4,7 @@ import control
 
 
 class PoleCart():
+
     def __init__(self, init_pos=None, init_angle=None):
         self.mass_cart = 10  # kg
         self.mass_pole = 10  # kg
@@ -25,6 +26,8 @@ class PoleCart():
             [0],
             [0]
         ])
+        self.ref_pos = 0
+        self.theta_max = 0
 
     def odes(self, p, dp, ddp, a, da, dda):
         m_p = self.mass_pole
@@ -35,7 +38,7 @@ class PoleCart():
         i_p = self.inertia_pole
         g = self.g
         if self.swing_up_flag:
-            f = self.swing_up_v3(a, da)
+            f = self.swing_up_v3(a, da, p)
         else:
             f = 0
 
@@ -255,11 +258,11 @@ class PoleCart():
             f = 0
         return f
 
-    def swing_up_v3(self, angle, angle_dot):
+    def swing_up_v3(self, angle, angle_dot, position):
         g = 9.81
-        E_p = 0.5 * (self.inertia_pole + self.mass_pole*self.length_pole**2) * angle_dot ** 2 + g * self.mass_pole * self.length_pole*(cos(angle) - 1)
+        E_p = 0.5 * (self.inertia_pole + self.mass_pole * self.length_pole**2)*0 * angle_dot ** 2 + g * self.mass_pole * self.length_pole*(cos(angle))
         E_t = self.length_pole*self.mass_pole*g
-        E_t = 0
+        #E_t = 0
 
         if angle < 0.0 + 0.15 or angle > 3.1415 * 2 - 0.15:
             print(f"Energy error at top: {E_t - E_p}")
@@ -267,10 +270,23 @@ class PoleCart():
             self.swing_up_flag = False
             self.use_lqr = True
 
-        if self.swing_up_flag:
-            #f = (E_t - E_p) * angle_dot * cos(angle) * 1
-            f = 52 * sign(angle_dot) * sign(cos(angle))
+        if abs(angle) > self.theta_max:
+            self.theta_max = angle
 
+        if self.swing_up_flag:
+            theta_best_1 = 3.1415 - self.theta_max/2
+            theta_best_2 = 3.1415 + self.theta_max/2
+            x_min = -0.3
+            x_max = 0.3
+            if angle > theta_best_1 and angle_dot < 0:
+                self.ref_pos = x_max
+                f = (self.ref_pos - position) * (E_t - E_p)
+            elif angle < theta_best_2 and angle_dot > 0:
+                self.ref_pos = x_min
+                f = (self.ref_pos - position) * (E_t - E_p)
+            else:
+                self.ref_pos = position
+                f = (self.ref_pos - position)*100
         else:
             f = 0
         return f
