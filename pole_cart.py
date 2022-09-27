@@ -6,12 +6,12 @@ import control
 class PoleCart():
 
     def __init__(self, init_pos=None, init_angle=None):
-        self.mass_cart = 10  # kg
-        self.mass_pole = 10  # kg
-        self.damping_cart = 0.1  # Ns/m
-        self.damping_pole = 1.17  # Ns/m  ¤ 1.17
-        self.length_pole = 0.6  # m
-        self.inertia_pole = 0.05  # m^2
+        self.mass_cart = 288/1000  # kg
+        self.mass_pole = 72/1000  # kg
+        self.damping_cart = 0.0001  # Ns/m
+        self.damping_pole = 0.000017  # Ns/m  ¤ 1.17
+        self.length_pole = 68.5/100 - 24.6/100  # m
+        self.inertia_pole = self.mass_pole*self.length_pole**2  # m^2
         self.g = 9.81  # m/s^2
         self.dt = 1/300  # 0.00001 ## Use this value to run a true simulation with no energy loss or gain
         self.fps = 30
@@ -85,12 +85,12 @@ class PoleCart():
             [b_4]
         ])
         Q = matrix([
-            [10, 0, 0,  0],
-            [0, 1, 0,  0],
-            [0, 0, 100, 0],
-            [0, 0,  0, 1]
+            [1, 0, 0,  0],
+            [0, .1, 0,  0],
+            [0, 0, 10, 0],
+            [0, 0,  0, .1]
         ])
-        R = 0.01
+        R = 0.1
 
         K, S, E = control.lqr(A, B, Q, R)
         return A, B, K
@@ -274,16 +274,19 @@ class PoleCart():
             self.theta_max = angle
 
         if self.swing_up_flag:
-            theta_best_1 = 3.1415 - self.theta_max/2
-            theta_best_2 = 3.1415 + self.theta_max/2
+            theta_best_1 = 3.1415 - self.theta_max
+            theta_best_2 = 3.1415 + self.theta_max
             x_min = -0.3
             x_max = 0.3
+            gain = 1.1
             if angle > theta_best_1 and angle_dot < 0:
                 self.ref_pos = x_max
-                f = (self.ref_pos - position) * (E_t - E_p)
+                f = (self.ref_pos - position) * gain
+                #f = (self.ref_pos - position) * (E_t - E_p)*gain
             elif angle < theta_best_2 and angle_dot > 0:
                 self.ref_pos = x_min
-                f = (self.ref_pos - position) * (E_t - E_p)
+                f = (self.ref_pos - position) * gain
+                #f = (self.ref_pos - position) * (E_t - E_p)*gain
             else:
                 self.ref_pos = position
                 f = (self.ref_pos - position)*100
